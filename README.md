@@ -5,7 +5,7 @@ A wrapper of Grand Central Dispatch written in Swift.
 
 Examples
 --------
-** gcd **
+**gcd**
 ```swift
 // submit your code for asynchronous execution on a global queue with high priority
 gcd.async(.High) {
@@ -52,7 +52,7 @@ gcd.once(&onceToken) {
 }
 ```
 
-** manage group of block with GCDGroup **
+**manage group of block with GCDGroup**
 ```swift
 // create group
 let group = GCDGroup()
@@ -71,7 +71,7 @@ group.notify(.Main) {
 group.wait(10)
 ```
 
-** create your custom queue with CGDQueue **
+**create your custom queue with CGDQueue**
 ```swift
 // create a serial queue
 let serialQueue = GCDQueue(serial: "mySerialQueue")
