@@ -68,7 +68,7 @@ class GCDQueue
     *  @param label (can be nil)
     */
     init(serial label: String?) {
-        if label {
+        if label != nil {
             dispatchQueue = dispatch_queue_create(label!, DISPATCH_QUEUE_SERIAL)
         }
         else {
@@ -82,7 +82,7 @@ class GCDQueue
     *  @param label (can be nil)
     */
     init(concurrent label: String?) {
-        if label {
+        if label != nil {
             dispatchQueue = dispatch_queue_create(label!, DISPATCH_QUEUE_CONCURRENT)
         }
         else {
@@ -234,7 +234,7 @@ class gcd
     *
     *  @return
     */
-    class func once(predicate: UnsafePointer<dispatch_once_t>, closure: GCDClosure) {
+    class func once(predicate: UnsafeMutablePointer<dispatch_once_t>, closure: GCDClosure) {
         dispatch_once(predicate, closure)
     }
 }
