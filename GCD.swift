@@ -7,11 +7,11 @@
 
 import Foundation
 
-typealias GCDClosure = () -> ()
-typealias GCDApplyClosure = (UInt) -> ()
-typealias GCDOnce = dispatch_once_t
+public typealias GCDClosure = () -> ()
+public typealias GCDApplyClosure = (UInt) -> ()
+public typealias GCDOnce = dispatch_once_t
 
-enum QueueType {
+public enum QueueType {
     case Main
     case High
     case Default
@@ -19,7 +19,7 @@ enum QueueType {
     case Background
     case Custom(GCDQueue)
     
-    func getQueue() -> dispatch_queue_t {
+    public func getQueue() -> dispatch_queue_t {
         switch self {
         // return concurrent queue with hight priority
         case .High:
@@ -51,14 +51,14 @@ enum QueueType {
     }
 }
 
-class GCDQueue
+public class GCDQueue
 {
     let dispatchQueue: dispatch_queue_t
     
     /**
     *  Init with main queue (tasks execute serially on your application’s main thread)
     */
-    init() {
+    public init() {
         dispatchQueue = dispatch_get_main_queue()
     }
     
@@ -67,7 +67,7 @@ class GCDQueue
     *
     *  @param label (can be nil)
     */
-    init(serial label: String?) {
+    public init(serial label: String?) {
         if label != nil {
             dispatchQueue = dispatch_queue_create(label!, DISPATCH_QUEUE_SERIAL)
         }
@@ -81,7 +81,7 @@ class GCDQueue
     *
     *  @param label (can be nil)
     */
-    init(concurrent label: String?) {
+    public init(concurrent label: String?) {
         if label != nil {
             dispatchQueue = dispatch_queue_create(label!, DISPATCH_QUEUE_CONCURRENT)
         }
@@ -96,7 +96,7 @@ class GCDQueue
     *  @param GCDClosure
     *
     */
-    func asyncBarrier(closure: GCDClosure) {
+    public func asyncBarrier(closure: GCDClosure) {
         dispatch_barrier_async(dispatchQueue, closure)
     }
    
@@ -106,7 +106,7 @@ class GCDQueue
     *  @param GCDClosure
     *
     */
-    func syncBarrier(closure: GCDClosure) {
+    public func syncBarrier(closure: GCDClosure) {
         dispatch_barrier_sync(dispatchQueue, closure)
     }
     
@@ -114,7 +114,7 @@ class GCDQueue
     *  suspend queue
     *
     */
-    func suspend() {
+    public func suspend() {
         dispatch_suspend(dispatchQueue)
     }
     
@@ -122,25 +122,25 @@ class GCDQueue
     *  resume queue
     *
     */
-    func resume() {
+    public func resume() {
         dispatch_resume(dispatchQueue)
     }
     
 }
 
-class GCDGroup
+public class GCDGroup
 {
     let dispatchGroup: dispatch_group_t
     
-    init() {
+    public init() {
         dispatchGroup = dispatch_group_create()
     }
     
-    func enter() {
+    public func enter() {
         dispatch_group_enter(dispatchGroup)
     }
     
-    func leave() {
+    public func leave() {
         dispatch_group_leave(dispatchGroup)
     }
    
@@ -152,7 +152,7 @@ class GCDGroup
     *
     *  @return all blocks associated with the group completed before the specified timeout or not
     */
-    func wait(timeout: Double) -> Bool {
+    public func wait(timeout: Double) -> Bool {
         let t = timeout * Double(NSEC_PER_SEC)
         return dispatch_group_wait(dispatchGroup, dispatch_time(DISPATCH_TIME_NOW, Int64(t))) == 0
     }
@@ -164,7 +164,7 @@ class GCDGroup
     *  @param GCDClosure
     *
     */
-    func async(queueType: QueueType, closure: GCDClosure) {
+    public func async(queueType: QueueType, closure: GCDClosure) {
         dispatch_group_async(dispatchGroup, queueType.getQueue(), closure)
     }
    
@@ -176,12 +176,12 @@ class GCDGroup
     *  @param GCDClosure
     *
     */
-    func notify(queueType: QueueType, closure: GCDClosure) {
+    public func notify(queueType: QueueType, closure: GCDClosure) {
         dispatch_group_notify(dispatchGroup, queueType.getQueue(), closure)
     }
 }
 
-class gcd
+public class gcd
 {
     /**
     *  Async
@@ -191,12 +191,12 @@ class gcd
     *  @param GCDClosure : the block will be run
     *
     */
-    class func async(queueType: QueueType, closure: GCDClosure) {
+    public class func async(queueType: QueueType, closure: GCDClosure) {
         dispatch_async(queueType.getQueue(), closure)
     }
    
     // Enqueue a block for execution at the specified time
-    class func async(queueType: QueueType, delay: Double, closure: GCDClosure) {
+    public class func async(queueType: QueueType, delay: Double, closure: GCDClosure) {
         let t = delay * Double(NSEC_PER_SEC)
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(t)), queueType.getQueue(), closure)
     }
@@ -209,7 +209,7 @@ class gcd
     *  @param GCDClosure :  the block will be run
     *
     */
-    class func sync(queueType: QueueType, closure: GCDClosure) {
+    public class func sync(queueType: QueueType, closure: GCDClosure) {
         dispatch_sync(queueType.getQueue(), closure)
     }
    
@@ -222,7 +222,7 @@ class gcd
     *  @param GCDApplyClosure :  the block will be run
     *
     */
-    class func apply(queueType: QueueType, interators: UInt, closure: GCDApplyClosure) {
+    public class func apply(queueType: QueueType, interators: UInt, closure: GCDApplyClosure) {
         dispatch_apply(interators, queueType.getQueue(), closure)
     }
     
@@ -234,7 +234,7 @@ class gcd
     *
     *  @return
     */
-    class func once(predicate: UnsafeMutablePointer<dispatch_once_t>, closure: GCDClosure) {
+    public class func once(predicate: UnsafeMutablePointer<dispatch_once_t>, closure: GCDClosure) {
         dispatch_once(predicate, closure)
     }
 }
