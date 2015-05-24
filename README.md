@@ -90,5 +90,11 @@ myQueue.syncBarrier {
 }
 ```
 
-##Integration
-Just drag GCD.swift file to the project tree
+##Installation
+
+- Installation with CocoaPods
+ `pod 'GCD'`
+
+- Copying all the files into your project
+
+- Using submodule

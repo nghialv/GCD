@@ -8,7 +8,7 @@
 import Foundation
 
 public typealias GCDClosure = () -> ()
-public typealias GCDApplyClosure = (UInt) -> ()
+public typealias GCDApplyClosure = (Int) -> ()
 public typealias GCDOnce = dispatch_once_t
 
 public enum QueueType {
@@ -223,7 +223,7 @@ public class gcd
     *
     */
     public class func apply(queueType: QueueType, interators: UInt, closure: GCDApplyClosure) {
-        dispatch_apply(interators, queueType.getQueue(), closure)
+        dispatch_apply(Int(interators), queueType.getQueue(), closure)
     }
     
     /**
